@@ -50,16 +50,16 @@
    (list 0.0 0.0 0.0)))
 
 (define plane-xs
-  (vector
-   (vector 1.0 2.05)
-   (vector 1.0 3.0)
-   (vector 2.0 2.0)
-   (vector 2.0 3.91)
-   (vector 3.0 6.13)
-   (vector 4.0 8.09)))
+  (tensor
+   (tensor 1.0 2.05)
+   (tensor 1.0 3.0)
+   (tensor 2.0 2.0)
+   (tensor 2.0 3.91)
+   (tensor 3.0 6.13)
+   (tensor 4.0 8.09)))
 
 (define plane-ys
-  (vector 13.99
+  (tensor 13.99
    15.99
    18.0
    22.4
@@ -71,8 +71,16 @@
     (sum-1
      (* w t))))
 
+(dot-product-1-1 (tensor 2.0 1.0 7.0) (tensor 8.0 4.0 3.0))
+
 (define plane
   (λ (t)
     (λ (theta)
       (+ (dot-product-1-1 (ref theta 0) t) (ref theta 1)))))
 
+(with-hypers
+    ([revs 1000]
+     [alpha 0.001])
+  (gradient-descent
+   ((l2-loss plane) plane-xs plane-ys)
+   (list (tensor 0.0 0.0) 0.0)))
