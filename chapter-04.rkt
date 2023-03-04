@@ -2,7 +2,7 @@
 
 ;; 
 
-(require malt)
+(require (except-in malt ))
 
 (require "chapter-03.rkt")
 

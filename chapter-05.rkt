@@ -2,11 +2,11 @@
 
 ;; 
 
-(require malt)
+(require (except-in malt ))
 
 (require "chapter-03.rkt")
 
-(provide quad-xs quad-ys)
+(provide quad-xs quad-ys plane-xs plane-ys gradient-descent)
 
 (declare-hyper revs)
 (declare-hyper alpha)
@@ -60,11 +60,19 @@
 
 (define plane-ys
   (tensor 13.99
-   15.99
-   18.0
-   22.4
-   30.2
-   37.94))
+          15.99
+          18.0
+          22.4
+          30.2
+          37.94))
+
+(define plane-ys-2
+  (tensor 13.99
+          15.99))
+;   18.0
+;   22.4
+;   30.2
+;   37.94))
 
 (define dot-product-1-1
   (λ (w t)
@@ -81,6 +89,12 @@
 (with-hypers
     ([revs 1000]
      [alpha 0.001])
+  ((l2-loss plane) plane-xs plane-ys)
+  (list (tensor 0.0 0.0) 0.0))
+
+(with-hypers
+    ([revs 1000]
+     [alpha 0.001])
   (gradient-descent
-   ((l2-loss plane) plane-xs plane-ys)
+   ((l2-loss plane) plane-xs plane-ys-2)
    (list (tensor 0.0 0.0) 0.0)))

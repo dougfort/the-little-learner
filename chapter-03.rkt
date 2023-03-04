@@ -2,7 +2,7 @@
 
 ;; 
 
-(require malt)
+(require (except-in malt))
 (require "chapter-01.rkt")
 
 (provide line-xs line-ys)
