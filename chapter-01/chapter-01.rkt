@@ -4,7 +4,6 @@
 
 (require malt)
 
-
 (define line
   (λ (x)
     (λ (θ)
