@@ -52,23 +52,30 @@
             (- ys pred-ys))))))))
 
 (define lonely-i
-  (λ (theta)
-    (map (λ (p)
-           (list p))
-         theta)))
+  (λ (p)
+    (list p)))
 
 (define lonely-d
-  (λ (big-theta)
-    (map (λ (p)
-           (ref p 0))
-         big-theta)))
+  (λ (p)
+    (ref p 0)))
 
 (define lonely-u
-  (λ (big-theta gs)
-    (map (λ (p g)
-           (list (- (ref p 0) (* alpha g))))
-         big-theta
-         gs)))
+  (λ (p g)
+    (list (- (ref p 0) (* alpha g)))))
+
+(define naked-i
+  (λ (p)
+    (let ([p p])
+      p)))
+
+(define naked-d
+  (λ (p)
+    (let ([p p])
+      p)))
+
+(define naked-u
+  (λ (p g)
+    (- p (* alpha g))))
 
 (define revise
   (λ (f revs theta)
@@ -80,13 +87,16 @@
   (λ (inflate deflate update)
     (λ (obj theta)
       (let ([f (λ (big-theta)
-                 (update
-                  big-theta
-                  (gradient-of obj (deflate big-theta))))])
-        (deflate (revise f revs (inflate theta)))))))
+                 (map update
+                      big-theta
+                      (gradient-of obj (map deflate big-theta))))])
+        (map deflate (revise f revs (map inflate theta)))))))
 
 (define lonely-gradient-descent
   (gradient-descent lonely-i lonely-d lonely-u))
+
+(define naked-gradient-descent
+  (gradient-descent naked-i naked-d naked-u))
 
 (define samples
   (λ (n s)
@@ -130,3 +140,7 @@
 (module+ test
   (test-begin
    (try-plane lonely-gradient-descent)))
+
+(module+ test
+  (test-begin
+   (try-plane naked-gradient-descent)))
